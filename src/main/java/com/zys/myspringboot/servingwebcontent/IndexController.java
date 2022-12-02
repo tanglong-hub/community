@@ -13,16 +13,20 @@ import javax.servlet.http.HttpServletRequest;
 public class IndexController {
     @Autowired
     private UserMapper userMapper;
+
     @GetMapping("/")
-    public String index(HttpServletRequest requeset){
-        Cookie[] cookies = requeset.getCookies();
-        for (Cookie cookie : cookies) {
-            if(cookie.getName().equals("token")) {
-                User user = userMapper.findByToken(cookie.getValue());
-                if(user != null){
-                    requeset.getSession().setAttribute("user", user);
+    public String index(HttpServletRequest request) {
+        User user = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    user = userMapper.findByToken(cookie.getValue());
+                    if (user != null) {
+                        request.getSession().setAttribute("user", user);
+                    }
+                    break;
                 }
-                break;
             }
         }
         return "index";

@@ -8,6 +8,7 @@ import com.zys.myspringboot.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -37,7 +38,8 @@ public class AuthorizeController {
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
                            HttpServletRequest request,
-                           HttpServletResponse response) {
+                           HttpServletResponse response,
+                           Model model) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setCode(code);
         accessTokenDTO.setState(state);
@@ -47,7 +49,7 @@ public class AuthorizeController {
 
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getuser(accessToken);
-        if(githubUser != null){
+        if (githubUser != null && githubUser.getName() != null) {
             User user = new User();
             String token = UUID.randomUUID().toString();
             user.setToken(token);
@@ -57,12 +59,14 @@ public class AuthorizeController {
             user.setGmtModified(user.getGmtCreate());
             user.setBio(githubUser.getBio());
             user.setAccessToken(accessToken);
+            user.setAvatarUrl(githubUser.getAvatar_url());
+            model.addAttribute("avatar_url", githubUser.getAvatar_url());
             userMapper.insert(user);
             response.addCookie(new Cookie("token", token));
 //            //登陆成功，写cookie和session
 //            request.getSession().setAttribute("user", githubUser);
             return "redirect:/";
-        }else{
+        } else {
             //登陆失败，重新登陆
             return "redirect:/";
         }
