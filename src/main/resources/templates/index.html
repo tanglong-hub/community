@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:color="http://www.w3.org/1999/xhtml">
 <head>
     <title>zys' comunity</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -11,6 +11,9 @@
 
     <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
     <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
+
+    <!-- 自定义格式 -->
+    <link rel="stylesheet" href="css/community.css"/>
 
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
@@ -24,7 +27,7 @@
                     data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">zys' comunity</span>
             </button>
-            <a class="navbar-brand" href="#">zys' comunity</a>
+            <a class="navbar-brand" href="/" style="color:#06a6b9">zys' comunity</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -48,6 +51,10 @@
                         <li><a href="#">退出登录</a></li>
                     </ul>
                 </li>
+                <li th:if="${session.user != null}">
+                    <img th:src="${session.user.getAvatarUrl()}" class="img-rounded img-thumbnail"
+                         height="50" width="50">
+                </li>
                 <li th:if="${session.user == null}">
                     <a href="https://github.com/login/oauth/authorize?client_id=92603e8da5b35a7f22d2&state=1">登录</a>
                 </li>
@@ -55,5 +62,35 @@
         </div>
     </div>
 </nav>
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h3 style="color:green"><span class="glyphicon glyphicon-sort-by-attributes-alt" aria-hidden="true"></span>
+                发现</h3>
+            <hr>
+
+            <div class="media" th:each="question:${questions}">
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object img-thumbnail" th:src="${question.user.avatarUrl}">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading text-primary" th:text="${question.title}"></h4>
+                    <p class="text-warning" th:text="${question.description}"></p>
+                    <span class="text-desc">
+                        <span th:text="${question.commentCount}"></span>个回复 ·
+                        <span th:text="${question.viewCount}"></span>次浏览 ·
+                        <span th:text="${question.likeCount}"></span>次点赞 ·
+                        <span th:text="${#dates.format(question.gmtCreate,'YYYY-MM-dd HH:mm:ss')}"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <h2>热门话题</h2>
+        </div>
+    </div>
+</div>
 </body>
 </html>
