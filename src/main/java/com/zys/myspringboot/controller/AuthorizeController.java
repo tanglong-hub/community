@@ -1,4 +1,4 @@
-package com.zys.myspringboot.servingwebcontent;
+package com.zys.myspringboot.controller;
 
 import com.zys.myspringboot.dto.AccessTokenDTO;
 import com.zys.myspringboot.dto.GithubUser;
