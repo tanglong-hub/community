@@ -8,6 +8,7 @@ create table USER_NAME
     GMT_MODIFIED BIGINT,
     AC_TOKEN     VARCHAR(100),
     BIO          VARCHAR(256),
+    avatar_url   VARCHAR(100),
     constraint USER_NAME_PK
         primary key (ID)
 );
