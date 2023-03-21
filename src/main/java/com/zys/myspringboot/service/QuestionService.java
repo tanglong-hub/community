@@ -2,6 +2,9 @@ package com.zys.myspringboot.service;
 
 import com.zys.myspringboot.dto.PaginationDTO;
 import com.zys.myspringboot.dto.QuestionDTO;
+import com.zys.myspringboot.exception.CustomizeErrorCode;
+import com.zys.myspringboot.exception.CustomizeException;
+import com.zys.myspringboot.mapper.QuestionExtMapper;
 import com.zys.myspringboot.mapper.QuestionMapper;
 import com.zys.myspringboot.mapper.UserMapper;
 import com.zys.myspringboot.model.Question;
@@ -24,11 +27,14 @@ public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
 
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
+
     public PaginationDTO list(Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
 
-        Integer totalPage = (int) Math.ceil(totalCount / size);
+        Integer totalPage = (int) Math.ceil((double)totalCount / size);
         if (page < 1) page = 1;
         if (page > totalPage) page = totalPage;
 
@@ -50,13 +56,13 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    public PaginationDTO list(Long userId, Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         QuestionExample example = new QuestionExample();
         example.createCriteria()
                 .andCreatorEqualTo(userId);
         Integer totalCount = (int) questionMapper.countByExample(example);
-        Integer totalPage = (int) Math.ceil(totalCount / size);
+        Integer totalPage = (int) Math.ceil((double)totalCount / size);
         if (page > totalPage) page = totalPage;
         if (page < 1) page = 1;
 
@@ -77,8 +83,11 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if(question == null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -90,18 +99,22 @@ public class QuestionService {
         if (question.getId() == null) {
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.insert(question);
+            question.setViewCount(0);
+            question.setCommentCount(0);
+            question.setLikeCount(0);
+            questionMapper.insertSelective(question);
         } else {
-//            Question updateQuestion = new Question();
-//            updateQuestion.setGmtModified(System.currentTimeMillis());
-//            updateQuestion.setTitle(question.getTitle());
-//            updateQuestion.setDescription(question.getDescription());
-//            updateQuestion.setTag(question.getTag());
-//            QuestionExample questionExample = new QuestionExample();
-//            questionExample.createCriteria()
-//                    .andIdEqualTo(question.getId());
-//            questionMapper.updateByExampleSelective(updateQuestion, questionExample);
-            questionMapper.updateByPrimaryKeySelective(question);
+            int updated = questionMapper.updateByPrimaryKeySelective(question);
+            if(updated != 1){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
+    }
+
+    public void incView(Long id) {
+        Question row = new Question();
+        row.setId(id);
+        row.setViewCount(1);
+        questionExtMapper.incView(row);
     }
 }

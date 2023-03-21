@@ -1,6 +1,7 @@
 package com.zys.myspringboot.controller;
 
 import com.zys.myspringboot.dto.QuestionDTO;
+import com.zys.myspringboot.mapper.QuestionMapper;
 import com.zys.myspringboot.model.Question;
 import com.zys.myspringboot.model.User;
 import com.zys.myspringboot.service.QuestionService;
@@ -21,8 +22,8 @@ public class PublishController {
     private QuestionService questionService;
 
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable(name = "id") Integer id,
-                       Model model){
+    public String edit(@PathVariable(name = "id") Long id,
+                       Model model) {
         QuestionDTO question = questionService.getById(id);
         model.addAttribute("title", question.getTitle());
         model.addAttribute("description", question.getDescription());
@@ -38,15 +39,16 @@ public class PublishController {
 
     @PostMapping("/publish")
     public String doPublish(
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("tag") String tag,
-            @RequestParam("id") Integer id,
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "id", required = false) Long id,
             HttpServletRequest request,
             Model model) {
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
+        model.addAttribute("id", id);
 
         User user = (User) request.getSession().getAttribute("user");
 

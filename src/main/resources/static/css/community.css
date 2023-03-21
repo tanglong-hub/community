@@ -12,6 +12,11 @@
     float: right;
 }
 
+.btn-comment {
+    margin: 3px;
+    float: right;
+}
+
 .media-object {
     width: 50px;
     height: 50px;
@@ -23,10 +28,61 @@
     font-size: 14px;
 }
 
-.img-thumbnail{
+.img-thumbnail {
     background-color: #18c8fa;
 }
 
-.profile .section{
+.profile .section {
     margin-top: 15px;
+}
+
+.comment-form-margin {
+    margin: 10px 0;
+}
+
+.media-body-text {
+    padding: 15px 0;
+}
+
+.comment-sp {
+    margin-top: 0;
+}
+
+.sub-comments {
+    border-radius: 5px;
+    margin-top: 10px;
+    border: 1px solid #eee;
+    padding-top: 15px;
+    margin-bottom: 15px;
+}
+
+.menu {
+    color: #5cb864;
+}
+
+.menu .icon {
+    margin-right: 6px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.menu .icon:hover{
+    color: #056279;
+}
+
+.menu .comment-icon {
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.menu .comment-icon :hover {
+    color: #056279;
+}
+
+.menu .active {
+    color: #056279;
+}
+
+.menu .icon:hover {
+    color: #056279;
 }

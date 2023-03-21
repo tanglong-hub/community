@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:color="http://www.w3.org/1999/xhtml">
+<head>
+    <title>zys' comunity</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <!--    导入jQuery-->
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+
+    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css"/>
+
+    <!-- 自定义格式 -->
+    <link rel="stylesheet" href="/css/community.css"/>
+
+    <script src="/js/jquery-3.6.3.min.js"></script>
+
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+</head>
+<body>
+<div th:insert="~{navigation :: nav}"></div>
+<div class="container-fluid main">
+    <div class="row">
+        <div class="jumbotron">
+            <h1>出错了！！！</h1>
+            <p th:text="${message}">请稍后再重新加载</p>
+            <p><a class="btn btn-primary btn-lg" href="/" role="button">回到主页</a></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

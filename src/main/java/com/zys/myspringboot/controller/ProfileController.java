@@ -23,7 +23,7 @@ public class ProfileController {
                           @PathVariable(name = "action") String action,
                           Model model,
                           @RequestParam(name = "page", defaultValue = "1") Integer page,
-                          @RequestParam(name = "size", defaultValue = "3") Integer size) {
+                          @RequestParam(name = "size", defaultValue = "4") Integer size) {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) return "rediret:/";
 

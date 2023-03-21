@@ -20,6 +20,17 @@
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
 </head>
+
+<script type="application/javascript">
+    window.onload = function (){
+        var item = window.localStorage.getItem("closable");
+        if(item){
+            window.close();
+            window.localStorage.removeItem("closable");
+        }
+    }
+</script>
+
 <body>
 <div th:insert="~{navigation :: nav}"></div>
 <div class="container-fluid main">
@@ -31,7 +42,7 @@
 
             <div class="media" th:each="question:${pagination.questions}">
                 <div class="media-left">
-                    <a href="#">
+                    <a th:href="@{'/question/'+ ${question.id}}">
                         <img class="media-object img-thumbnail" th:src="${question.user.avatarUrl}">
                     </a>
                 </div>
