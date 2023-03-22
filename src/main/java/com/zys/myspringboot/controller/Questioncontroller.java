@@ -3,6 +3,7 @@ package com.zys.myspringboot.controller;
 import com.zys.myspringboot.dto.CommentDTO;
 import com.zys.myspringboot.dto.QuestionDTO;
 import com.zys.myspringboot.enums.CommentTypeEnum;
+import com.zys.myspringboot.model.Question;
 import com.zys.myspringboot.service.CommentService;
 import com.zys.myspringboot.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +27,13 @@ public class Questioncontroller {
     public String question(@PathVariable(name = "id") Long id,
                            Model model) {
         QuestionDTO questionDTO = questionService.getById(id);
+        List<Question> relatedQuestions = questionService.selectRelated(questionDTO);
         List<CommentDTO> commentDTOs = commentService.getListById(id, CommentTypeEnum.QUESTION);
+
         questionService.incView(id);
         model.addAttribute("question", questionDTO);
         model.addAttribute("comments", commentDTOs);
+        model.addAttribute("relatedQuestions", relatedQuestions);
         return "question";
     }
 }

@@ -1,6 +1,9 @@
 package com.zys.myspringboot.mapper;
 
+import com.zys.myspringboot.dto.QuestionQueryDTO;
 import com.zys.myspringboot.model.Question;
+
+import java.util.List;
 
 public interface QuestionExtMapper {
     /**
@@ -11,4 +14,10 @@ public interface QuestionExtMapper {
      */
     int incView(Question row);
     int incCommentCount(Question row);
+
+    List<Question> selectRelated(Question question);
+
+    Integer countBySearch(QuestionQueryDTO questionQueryDTO);
+
+    List<Question> selectBySearch(QuestionQueryDTO questionQueryDTO);
 }
